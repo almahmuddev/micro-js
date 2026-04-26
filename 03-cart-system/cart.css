@@ -1,0 +1,301 @@
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    :root {
+        --bg: #f5f2ec;
+        --surface: #fdfcf9;
+        --surface2: #f0ede5;
+        --border: #e0dbd0;
+        --text: #201e18;
+        --muted: #9a9485;
+        --accent: #2d5a3d;
+        --accent-light: #e8f2eb;
+        --danger: #a33028;
+        --radius: 12px;
+    }
+
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Jost', sans-serif;
+        font-weight: 400;
+        min-height: 100vh;
+        padding: 2.5rem 1.5rem;
+    }
+
+    .layout {
+        max-width: 960px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        gap: 2rem;
+        align-items: start;
+    }
+
+    @media (max-width: 700px) {
+        .layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    h2 {
+        font-family: 'Fraunces', serif;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1.25rem;
+        letter-spacing: -0.02em;
+    }
+
+    /* ─── Products ─── */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+
+    .product-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: box-shadow 0.2s;
+    }
+
+    .product-card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.07);
+    }
+
+    .product-img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.8rem;
+    }
+
+    .product-body {
+        padding: 0.9rem;
+    }
+
+    .product-name {
+        font-family: 'Fraunces', serif;
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 0.2rem;
+    }
+
+    .product-sub {
+        font-size: 0.75rem;
+        color: var(--muted);
+        margin-bottom: 0.7rem;
+    }
+
+    .product-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .price {
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .add-btn {
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 0.35rem 0.75rem;
+        border-radius: 6px;
+        font-family: 'Jost', sans-serif;
+        font-size: 0.78rem;
+        font-weight: 500;
+        cursor: pointer;
+    }
+
+    .add-btn:hover {
+        background: #1f4129;
+    }
+
+    .add-btn:active {
+        transform: scale(0.96);
+    }
+
+    .add-btn.in-cart {
+        background: var(--accent-light);
+        color: var(--accent);
+    }
+
+    /* ─── Cart ─── */
+    .cart-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.5rem;
+        position: sticky;
+        top: 2rem;
+    }
+
+    .cart-panel h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .cart-count-badge {
+        background: var(--accent);
+        color: #fff;
+        font-family: 'Jost', sans-serif;
+        font-size: 0.72rem;
+        font-weight: 500;
+        padding: 1px 7px;
+        border-radius: 99px;
+        margin-left: auto;
+    }
+
+    .cart-empty {
+        text-align: center;
+        color: var(--muted);
+        font-size: 0.85rem;
+        padding: 1.5rem 0;
+    }
+
+    .cart-items {
+        list-style: none;
+    }
+
+    .cart-item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.7rem 0;
+        border-bottom: 1px solid var(--border);
+        animation: pop 0.2s ease both;
+    }
+
+    @keyframes pop {
+        from {
+            opacity: 0;
+            transform: scale(0.97);
+        }
+
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .cart-item-emoji {
+        font-size: 1.4rem;
+        flex-shrink: 0;
+    }
+
+    .cart-item-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        flex: 1;
+    }
+
+    .cart-item-price {
+        font-size: 0.8rem;
+        color: var(--muted);
+    }
+
+    .qty-controls {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .qty-btn {
+        width: 22px;
+        height: 22px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        color: var(--text);
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .qty-btn:hover {
+        background: var(--border);
+    }
+
+    .qty-btn.remove-btn {
+        border-color: transparent;
+        background: none;
+        color: var(--muted);
+        font-size: 0.85rem;
+    }
+
+    .qty-btn.remove-btn:hover {
+        color: var(--danger);
+        background: none;
+    }
+
+    .qty-display {
+        font-size: 0.82rem;
+        font-weight: 500;
+        min-width: 16px;
+        text-align: center;
+    }
+
+    .cart-summary {
+        margin-top: 1rem;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-bottom: 0.4rem;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        font-family: 'Fraunces', serif;
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-top: 0.75rem;
+        padding-top: 0.75rem;
+        border-top: 1px solid var(--border);
+    }
+
+    .checkout-btn {
+        width: 100%;
+        margin-top: 1rem;
+        background: var(--accent);
+        color: #fff;
+        border: none;
+        padding: 0.8rem;
+        border-radius: var(--radius);
+        font-family: 'Jost', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 500;
+        cursor: pointer;
+        letter-spacing: 0.01em;
+    }
+
+    .checkout-btn:hover {
+        background: #1f4129;
+    }
+
+    .checkout-btn:disabled {
+        background: var(--border);
+        color: var(--muted);
+        cursor: default;
+    }
