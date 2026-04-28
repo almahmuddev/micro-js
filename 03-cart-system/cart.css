@@ -254,6 +254,7 @@
 
     .cart-summary {
         margin-top: 1rem;
+        display:none
     }
 
     .summary-row {
