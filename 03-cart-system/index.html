@@ -1,208 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cart System — JS Build</title>
 
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;1,400&family=Jost:wght@300;400;500&display=swap"
+    rel="stylesheet" />
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="./cart.css" />
-  
+
 </head>
+
 <body>
 
-<div class="layout">
-  <!-- Products -->
-  <div>
-    <h2>Shop</h2>
-    <div class="products-grid" id="products-grid"></div>
-  </div>
+  <div class="layout">
+    <!-- Products -->
+    <div>
+      <h2>Shop</h2>
+      <div class="products-grid" id="products-grid"></div>
+    </div>
 
-  <!-- Cart -->
-  <div class="cart-panel">
-    <h2>
-      Cart
-      <span class="cart-count-badge" id="cart-badge">0</span>
-    </h2>
-    <p class="cart-empty" id="cart-empty">Your cart is empty.</p>
-    <ul class="cart-items" id="cart-items"></ul>
-    <div class="cart-summary" id="cart-summary">
-      <div class="summary-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
-      <div class="summary-row"><span>Shipping</span><span id="shipping">$0.00</span></div>
-      <div class="summary-total"><span>Total</span><span id="total">$0.00</span></div>
-      <button class="checkout-btn" id="checkout-btn">Checkout</button>
+    <!-- Cart -->
+    <div class="cart-panel">
+      <h2>
+        Cart
+        <span class="cart-count-badge" id="cart-badge">0</span>
+      </h2>
+      <p class="cart-empty" id="cart-empty">Your cart is empty.</p>
+      <ul class="cart-items" id="cart-items"></ul>
+      <div class="cart-summary" id="cart-summary">
+        <div class="summary-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
+        <div class="summary-row"><span>Shipping</span><span id="shipping">$0.00</span></div>
+        <div class="summary-total"><span>Total</span><span id="total">$0.00</span></div>
+        <button class="checkout-btn" id="checkout-btn">Checkout</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-  const PRODUCTS = [
-    { id: 1, name: 'Ceramic Mug',      sub: 'Hand-thrown, 12oz',    price: 28,  emoji: '☕', bg: '#fef3e8' },
-    { id: 2, name: 'Linen Tote',       sub: 'Natural, unbleached',  price: 45,  emoji: '👜', bg: '#f0ece4' },
-    { id: 3, name: 'Soy Candle',       sub: 'Cedar & vetiver',      price: 32,  emoji: '🕯️', bg: '#faf5ec' },
-    { id: 4, name: 'Hardcover Journal',sub: '192 pages, dotted',    price: 22,  emoji: '📓', bg: '#eef4f0' },
-    { id: 5, name: 'Desk Plant',       sub: 'Pothos, 4" pot',       price: 18,  emoji: '🌿', bg: '#edf5ee' },
-    { id: 6, name: 'Wool Throw',       sub: 'Merino, 50×60"',       price: 120, emoji: '🧣', bg: '#f5eee8' },
-  ];
+  <script>
+    const inventory = [
+      { id: 1, name: 'Ceramic Mug', sub: 'Hand-thrown, 12oz', price: 28, emoji: '☕', bg: '#fef3e8' },
+      { id: 2, name: 'Linen Tote', sub: 'Natural, unbleached', price: 45, emoji: '👜', bg: '#f0ece4' },
+      { id: 3, name: 'Soy Candle', sub: 'Cedar & vetiver', price: 32, emoji: '🕯️', bg: '#faf5ec' },
+      { id: 4, name: 'Hardcover Journal', sub: '192 pages, dotted', price: 22, emoji: '📓', bg: '#eef4f0' },
+      { id: 5, name: 'Desk Plant', sub: 'Pothos, 4" pot', price: 18, emoji: '🌿', bg: '#edf5ee' },
+      { id: 6, name: 'Wool Throw', sub: 'Merino, 50×60"', price: 120, emoji: '🧣', bg: '#f5eee8' },
+      { id: 7, name: 'Ceramic Plate', sub: 'Hand-thrown, 12oz', price: 28, emoji: '🍔', bg: '#f5e9e8' },
+    ];
 
-  const SHIPPING_THRESHOLD = 75;
-  const SHIPPING_COST = 8;
+    const freeShippingLimit = 75;
+    const standardShippingFee = 8;
 
-  // cart state — immutable updates only
-  let cart = [];
+    let myCart = [];
 
-  function getCartItem(id) {
-    return cart.find(item => item.id === id) || null;
-  }
+    function findItemInCart(itemId) {
+      return myCart.find(item => item.id === itemId) || null;
+    }
 
-  function addToCart(id) {
-    const existing = getCartItem(id);
-    if (existing) {
-      cart = cart.map(item =>
-        item.id === id ? { ...item, qty: item.qty + 1 } : item
+    function addItemToCart(itemId) {
+      const alreadyInCart = findItemInCart(itemId);
+
+      if (alreadyInCart) {
+        myCart = myCart.map(item =>
+          item.id === itemId ? { ...item, qty: item.qty + 1 } : item
+        );
+      } else {
+        const productData = inventory.find(p => p.id === itemId);
+        myCart = [...myCart, { ...productData, qty: 1 }];
+      }
+      refreshEverything();
+    }
+
+    function adjustQuantity(itemId, amount) {
+      const item = findItemInCart(itemId);
+      if (!item) return;
+
+      if (item.qty + amount <= 0) {
+        removeItemFromCart(itemId);
+        return;
+      }
+
+      myCart = myCart.map(item =>
+        item.id === itemId ? { ...item, qty: item.qty + amount } : item
       );
-    } else {
-      const product = PRODUCTS.find(p => p.id === id);
-      cart = [...cart, { ...product, qty: 1 }];
-    }
-    renderAll();
-  }
-
-  function updateQty(id, delta) {
-    const item = getCartItem(id);
-    if (!item) return;
-
-    if (item.qty + delta <= 0) {
-      removeFromCart(id);
-      return;
+      refreshEverything();
     }
 
-    cart = cart.map(item =>
-      item.id === id ? { ...item, qty: item.qty + delta } : item
-    );
-    renderAll();
-  }
+    function removeItemFromCart(itemId) {
+      myCart = myCart.filter(item => item.id !== itemId);
+      refreshEverything();
+    }
 
-  function removeFromCart(id) {
-    cart = cart.filter(item => item.id !== id);
-    renderAll();
-  }
+    function calculateSubtotal() {
+      return myCart.reduce((total, item) => total + item.price * item.qty, 0);
+    }
 
-  function calcSubtotal() {
-    return cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-  }
+    function calculateShipping(subtotal) {
+      if (myCart.length === 0) return 0;
+      return subtotal >= freeShippingLimit ? 0 : standardShippingFee;
+    }
 
-  function calcShipping(subtotal) {
-    return cart.length === 0 ? 0 : subtotal >= SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
-  }
+    function countTotalItems() {
+      return myCart.reduce((total, item) => total + item.qty, 0);
+    }
 
-  function totalItems() {
-    return cart.reduce((sum, item) => sum + item.qty, 0);
-  }
+    function formatCurrency(amount) {
+      return '$' + amount.toFixed(2);
+    }
 
-  function fmt(n) {
-    return '$' + n.toFixed(2);
-  }
+    function displayProducts() {
+      const productGrid = document.getElementById('products-grid');
+      productGrid.innerHTML = '';
 
-  function renderProducts() {
-    const grid = document.getElementById('products-grid');
-    grid.innerHTML = '';
-
-    PRODUCTS.forEach(p => {
-      const inCart = !!getCartItem(p.id);
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.innerHTML = `
-        <div class="product-img" style="background:${p.bg}">${p.emoji}</div>
+      inventory.forEach(item => {
+        const isAdded = !!findItemInCart(item.id);
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+        <div class="product-img" style="background:${item.bg}">${item.emoji}</div>
         <div class="product-body">
-          <div class="product-name">${p.name}</div>
-          <div class="product-sub">${p.sub}</div>
+          <div class="product-name">${item.name}</div>
+          <div class="product-sub">${item.sub}</div>
           <div class="product-footer">
-            <span class="price">${fmt(p.price)}</span>
-            <button class="add-btn ${inCart ? 'in-cart' : ''}" data-id="${p.id}">
-              ${inCart ? 'Added ✓' : 'Add'}
+            <span class="price">${formatCurrency(item.price)}</span>
+            <button class="add-btn ${isAdded ? 'in-cart' : ''}" data-id="${item.id}">
+              ${isAdded ? 'Added ✓' : 'Add'}
             </button>
           </div>
         </div>
       `;
-      card.querySelector('.add-btn').addEventListener('click', () => addToCart(p.id));
-      grid.appendChild(card);
-    });
-  }
-
-  function renderCart() {
-    const itemsEl   = document.getElementById('cart-items');
-    const emptyEl   = document.getElementById('cart-empty');
-    const summaryEl = document.getElementById('cart-summary');
-    const badge     = document.getElementById('cart-badge');
-
-    const subtotal = calcSubtotal();
-    const shipping = calcShipping(subtotal);
-    const total    = subtotal + shipping;
-    const count    = totalItems();
-
-    badge.textContent = count;
-
-    if (cart.length === 0) {
-      emptyEl.style.display = 'block';
-      summaryEl.style.display = 'none';
-      itemsEl.innerHTML = '';
-      return;
+        card.querySelector('.add-btn').addEventListener('click', () => addItemToCart(item.id));
+        productGrid.appendChild(card);
+      });
     }
 
-    emptyEl.style.display = 'none';
-    summaryEl.style.display = 'block';
+    function updateCartUI() {
+      const cartList = document.getElementById('cart-items');
+      const emptyMsg = document.getElementById('cart-empty');
+      const summaryBox = document.getElementById('cart-summary');
+      const cartBadge = document.getElementById('cart-badge');
 
-    itemsEl.innerHTML = '';
-    cart.forEach(item => {
-      const li = document.createElement('li');
-      li.className = 'cart-item';
-      li.innerHTML = `
+      const subtotal = calculateSubtotal();
+      const shipping = calculateShipping(subtotal);
+      const finalTotal = subtotal + shipping;
+      const itemCount = countTotalItems();
+
+      cartBadge.textContent = itemCount;
+
+      if (myCart.length === 0) {
+        emptyMsg.style.display = 'block';
+        summaryBox.style.display = 'none';
+        cartList.innerHTML = '';
+        return;
+      }
+
+      emptyMsg.style.display = 'none';
+      summaryBox.style.display = 'block';
+
+      cartList.innerHTML = '';
+      myCart.forEach(item => {
+        const row = document.createElement('li');
+        row.className = 'cart-item';
+        row.innerHTML = `
         <span class="cart-item-emoji">${item.emoji}</span>
         <div class="cart-item-name">${item.name}</div>
         <div class="qty-controls">
-          <button class="qty-btn" data-action="dec" data-id="${item.id}">−</button>
+          <button class="qty-btn" data-action="decrease" data-id="${item.id}">−</button>
           <span class="qty-display">${item.qty}</span>
-          <button class="qty-btn" data-action="inc" data-id="${item.id}">+</button>
-          <button class="qty-btn remove-btn" data-action="remove" data-id="${item.id}">✕</button>
+          <button class="qty-btn" data-action="increase" data-id="${item.id}">+</button>
+          <button class="qty-btn remove-btn" data-action="delete" data-id="${item.id}">✕</button>
         </div>
-        <span class="cart-item-price">${fmt(item.price * item.qty)}</span>
+        <span class="cart-item-price">${formatCurrency(item.price * item.qty)}</span>
       `;
-      itemsEl.appendChild(li);
+        cartList.appendChild(row);
+      });
+
+      cartList.onclick = (event) => {
+        const trigger = event.target.closest('[data-action]');
+        if (!trigger) return;
+
+        const id = parseInt(trigger.dataset.id);
+        const mode = trigger.dataset.action;
+
+        if (mode === 'increase') adjustQuantity(id, 1);
+        if (mode === 'decrease') adjustQuantity(id, -1);
+        if (mode === 'delete') removeItemFromCart(id);
+      };
+
+      document.getElementById('subtotal').textContent = formatCurrency(subtotal);
+      document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : formatCurrency(shipping);
+      document.getElementById('total').textContent = formatCurrency(finalTotal);
+      document.getElementById('checkout-btn').disabled = myCart.length === 0;
+    }
+
+    function refreshEverything() {
+      displayProducts();
+      updateCartUI();
+    }
+
+    document.getElementById('checkout-btn').addEventListener('click', () => {
+      const finalBill = calculateSubtotal() + calculateShipping(calculateSubtotal());
+      alert(`Order placed! Total: ${formatCurrency(finalBill)}\nThank you for shopping with us.`);
+      myCart = [];
+      refreshEverything();
     });
 
-    // event delegation — one listener on the list
-    itemsEl.onclick = (e) => {
-      const btn = e.target.closest('[data-action]');
-      if (!btn) return;
-      const id = parseInt(btn.dataset.id);
-      const action = btn.dataset.action;
-      if (action === 'inc')    updateQty(id, +1);
-      if (action === 'dec')    updateQty(id, -1);
-      if (action === 'remove') removeFromCart(id);
-    };
-
-    document.getElementById('subtotal').textContent = fmt(subtotal);
-    document.getElementById('shipping').textContent = shipping === 0 ? 'Free' : fmt(shipping);
-    document.getElementById('total').textContent    = fmt(total);
-    document.getElementById('checkout-btn').disabled = cart.length === 0;
-  }
-
-  function renderAll() {
-    renderProducts();
-    renderCart();
-  }
-
-  document.getElementById('checkout-btn').addEventListener('click', () => {
-    alert(`Order placed! Total: ${fmt(calcSubtotal() + calcShipping(calcSubtotal()))}\nThank you.`);
-    cart = [];
-    renderAll();
-  });
-
-  renderAll();
-</script>
+    refreshEverything();
+  </script>
 </body>
+
 </html>
