@@ -5,11 +5,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Toast System — JS Build</title>
-  <!-- Google Fonts -->
   <link
     href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap"
     rel="stylesheet" />
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="./toast.css">
 
 </head>
@@ -41,77 +39,77 @@
 
   <script>
     const toast = (() => {
-      const DURATION = 4000;
-      const MAX = 5;
-      const container = document.getElementById('toast-container');
-      const queueDisplay = document.getElementById('queue-display');
+      const stayTime = 4000;
+      const maxAllowed = 5; 
 
-      // track active toasts in a simple array
-      let active = [];
+      const box = document.getElementById('toast-container');
+      const statusLabel = document.getElementById('queue-display');
 
-      function updateQueueDisplay() {
-        queueDisplay.textContent = active.length === 0
+      let visibleToasts = [];
+
+      function refreshStatus() {
+        statusLabel.textContent = visibleToasts.length === 0
           ? '—'
-          : active.map(t => `[${t.type}]`).join('  ');
+          : visibleToasts.map(t => `[${t.type}]`).join('  ');
       }
 
-      function remove(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
+      function dismiss(toastId) {
+        const target = document.getElementById(toastId);
+        if (!target) return;
 
-        el.classList.add('removing');
+        target.classList.add('removing');
 
-        // wait for the CSS animation to finish before removing from DOM
-        el.addEventListener('animationend', () => {
-          el.remove();
-          active = active.filter(t => t.id !== id);
-          updateQueueDisplay();
+        target.addEventListener('animationend', () => {
+          target.remove();
+          visibleToasts = visibleToasts.filter(t => t.id !== toastId);
+          refreshStatus();
         }, { once: true });
       }
 
-      function notify(type, title, message) {
-        // if already at max, remove the oldest one first
-        if (active.length >= MAX) {
-          remove(active[0].id);
+      function spawn(type, title, text) {
+        if (visibleToasts.length >= maxAllowed) {
+          dismiss(visibleToasts[0].id);
         }
 
-        const id = `toast-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
-        const icons = {
+        const uniqueId = `msg-${Date.now()}-${Math.random().toString(16).slice(2, 6)}`;
+
+        const svgIcons = {
           success: `<svg class="toast-icon" viewBox="0 0 16 16" fill="none" stroke="var(--success-icon)" stroke-width="2"><circle cx="8" cy="8" r="7"/><path d="m5 8 2 2 4-4"/></svg>`,
           error: `<svg class="toast-icon" viewBox="0 0 16 16" fill="none" stroke="var(--error-icon)" stroke-width="2"><circle cx="8" cy="8" r="7"/><path d="m5 5 6 6M11 5l-6 6"/></svg>`,
           warning: `<svg class="toast-icon" viewBox="0 0 16 16" fill="none" stroke="var(--warning-icon)" stroke-width="2"><path d="M8 2 1.5 13.5h13L8 2Z"/><path d="M8 6v4M8 11.5v.5"/></svg>`,
           info: `<svg class="toast-icon" viewBox="0 0 16 16" fill="none" stroke="var(--info-icon)" stroke-width="2"><circle cx="8" cy="8" r="7"/><path d="M8 7v5M8 5v.01"/></svg>`,
         };
 
-        const el = document.createElement('div');
-        el.className = `toast toast-${type}`;
-        el.id = id;
-        el.innerHTML = `
-        ${icons[type]}
-        <div class="toast-body">
-          <div class="toast-title">${title}</div>
-          <div class="toast-msg">${message}</div>
-        </div>
-        <button class="toast-close" onclick="toast._remove('${id}')" aria-label="Close">&times;</button>
-        <div class="toast-progress" style="animation-duration: ${DURATION}ms;"></div>
-      `;
+        const toastElement = document.createElement('div');
+        toastElement.className = `toast toast-${type}`;
+        toastElement.id = uniqueId;
 
-        container.appendChild(el);
-        active.push({ id, type });
-        updateQueueDisplay();
+        toastElement.innerHTML = `
+          ${svgIcons[type]}
+          <div class="toast-body">
+            <div class="toast-title">${title}</div>
+            <div class="toast-msg">${text}</div>
+          </div>
+          <button class="toast-close" onclick="toast._kill('${uniqueId}')" aria-label="Close">&times;</button>
+          <div class="toast-progress" style="animation-duration: ${stayTime}ms;"></div>
+        `;
 
-        setTimeout(() => remove(id), DURATION);
+        box.appendChild(toastElement);
+        visibleToasts.push({ id: uniqueId, type });
+        refreshStatus();
+
+        setTimeout(() => dismiss(uniqueId), stayTime);
       }
 
       return {
-        success: (title, msg) => notify('success', title, msg),
-        error: (title, msg) => notify('error', title, msg),
-        warning: (title, msg) => notify('warning', title, msg),
-        info: (title, msg) => notify('info', title, msg),
+        success: (title, msg) => spawn('success', title, msg),
+        error: (title, msg) => spawn('error', title, msg),
+        warning: (title, msg) => spawn('warning', title, msg),
+        info: (title, msg) => spawn('info', title, msg),
         clearAll: () => {
-          [...active].forEach(t => remove(t.id));
+          [...visibleToasts].forEach(t => dismiss(t.id));
         },
-        _remove: remove,
+        _kill: dismiss, 
       };
     })();
   </script>
