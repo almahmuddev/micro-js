@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>01- Crypto Price Tracker</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #121212;
+            color: white;
+            font-family: system-ui, -apple-system, sans-serif;
+            display: grid;
+            place-items: center;
+            height: 100vh;
+        }
+
+        .card {
+            background: #1e1e1e;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            border-left: 5px solid #444;
+            transition: all 0.3s ease;
+            min-width: 250px;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        small {
+            opacity: 0.5;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        .up {
+            color: #00ff88;
+            border-color: #00ff88;
+        }
+
+        .down {
+            color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" id="tracker">
+        <small>Bitcoin (USD)</small>
+        <div class="price" id="price-display">Loading...</div>
+        <small id="status">Waking up server...</small>
+    </div>
+
+    <!-- javascript  intigration   -->
+
+    <script src="./crypto.js"></script>
+</body>
+
+</html>
