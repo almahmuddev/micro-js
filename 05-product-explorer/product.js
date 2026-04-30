@@ -66,25 +66,42 @@ function renderProducts(list) {
     });
 }
 
+function debounce(fn, delay = 300) {
+    let timeout;
+    return (...args) => {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => fn(...args), delay);
+    };
+}
+
 function update() {
     const filtered = getFilteredProducts();
     renderProducts(filtered);
 }
 
-document.getElementById('search').addEventListener('input', (e) => {
-    state.search = e.target.value;
+// Debounced search
+const handleSearch = debounce((value) => {
+    state.search = value.trim();
     update();
+}, 300);
+
+document.getElementById('search').addEventListener('input', (e) => {
+    handleSearch(e.target.value);
 });
 
+// Category filter
 document.getElementById('category').addEventListener('change', (e) => {
     state.category = e.target.value;
     update();
 });
 
+// Sorting
 document.getElementById('sort').addEventListener('change', (e) => {
     state.sort = e.target.value;
     update();
 });
 
-
 update();
+
+
+
