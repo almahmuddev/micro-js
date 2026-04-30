@@ -1,11 +1,9 @@
-
 const card = document.getElementById('card');
 const countdownEl = document.getElementById('countdown');
 const taskNameEl = document.getElementById('task-name-display');
 const setupUI = document.getElementById('setup-ui');
 const timerUI = document.getElementById('timer-ui');
 const taskInput = document.getElementById('task-input');
-
 
 const state = {
   endTime: null,
@@ -16,7 +14,7 @@ const state = {
   remaining: 0
 };
 
-
+// restore previous session if exists
 window.onload = () => {
   const savedTime = localStorage.getItem('endTime');
   const savedTask = localStorage.getItem('taskName');
@@ -28,7 +26,7 @@ window.onload = () => {
   }
 };
 
-
+// start a fresh focus
 function startTimer() {
   state.taskName = taskInput.value || "Deep Work";
   state.endTime = Date.now() + state.duration;
@@ -39,6 +37,7 @@ function startTimer() {
   resumeTimer(state.endTime);
 }
 
+// run or continue  timer
 function resumeTimer(endTime) {
   clearInterval(state.interval);
 
@@ -51,6 +50,7 @@ function resumeTimer(endTime) {
     const now = Date.now();
     const distance = endTime - now;
 
+    // timer finished
     if (distance <= 0) {
       clearInterval(state.interval);
       countdownEl.innerText = "00:00";
@@ -60,10 +60,8 @@ function resumeTimer(endTime) {
 
     state.remaining = distance;
     countdownEl.innerText = formatTime(distance);
-
   }, 1000);
 }
-
 
 function formatTime(ms) {
   const min = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
@@ -72,20 +70,21 @@ function formatTime(ms) {
   return `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
 }
 
-
 function togglePause() {
   if (!state.interval) return;
 
   if (!state.paused) {
     clearInterval(state.interval);
     state.paused = true;
-  } else {
-    state.endTime = Date.now() + state.remaining;
-    state.paused = false;
-    resumeTimer(state.endTime);
+    return;
   }
+
+  state.endTime = Date.now() + state.remaining;
+  state.paused = false;
+  resumeTimer(state.endTime);
 }
 
+// reset everything back to initial
 function resetTimer() {
   clearInterval(state.interval);
 
