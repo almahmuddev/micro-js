@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Explorer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 p-6">
+
+    <div class="max-w-5xl mx-auto">
+
+        <h1 class="text-2xl font-bold mb-4">Product Explorer</h1>
+
+        <!-- Controls -->
+        <div class="flex flex-wrap gap-3 mb-6">
+
+            <input id="search" class="border p-2 rounded w-60" placeholder="Search products..." />
+
+            <select id="category" aria-label="Select Category"
+                class="border p-2 rounded cursor-pointer hover:border-gray-400">
+                <option value="all">All</option>
+                <option value="home">Home</option>
+                <option value="fashion">Fashion</option>
+            </select>
+
+            <select id="sort" aria-label="Sort by Price"
+                class="border p-2 rounded cursor-pointer hover:border-gray-400">
+                <option value="default">Sort</option>
+                <option value="low">Price ↑</option>
+                <option value="high">Price ↓</option>
+            </select>
+
+        </div>
+
+        <!-- Product Grid -->
+        <div id="grid" class="grid grid-cols-2 md:grid-cols-3 gap-4"></div>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
