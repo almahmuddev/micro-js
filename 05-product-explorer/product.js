@@ -6,13 +6,20 @@ const state = {
 };
 
 // 2. data
+
 const products = [
   { id: 1, name: 'Ceramic Mug', price: 28, category: 'home' },
   { id: 2, name: 'Linen Tote', price: 45, category: 'fashion' },
-  { id: 3, name: 'Candle', price: 32, category: 'home' },
-  { id: 4, name: 'Notebook', price: 22, category: 'home' },
-  { id: 5, name: 'Sneakers', price: 90, category: 'fashion' },
-  { id: 6, name: 'Jacket', price: 120, category: 'fashion' }
+  { id: 3, name: 'Soy Candle', price: 32, category: 'home' },
+  { id: 4, name: 'Grid Notebook', price: 22, category: 'home' },
+  { id: 5, name: 'White Sneakers', price: 90, category: 'fashion' },
+  { id: 6, name: 'Utility Jacket', price: 120, category: 'fashion' },
+  { id: 7, name: 'Ceramic Plate', price: 28, category: 'home' },
+  { id: 8, name: 'Leather Wallet', price: 55, category: 'fashion' },
+  { id: 9, name: 'Glass Carafe', price: 38, category: 'home' },
+  { id: 10, name: 'Wool Beanie', price: 25, category: 'fashion' },
+  { id: 11, name: 'Matte Vase', price: 42, category: 'home' },
+  { id: 12, name: 'Canvas Cap', price: 30, category: 'fashion' }
 ];
 
 function getFilteredList() {
