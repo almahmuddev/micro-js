@@ -256,7 +256,9 @@ body {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    transition: background .2s;
+    /* transition: background .2s; */
+    transition-property: background;
+    transition-duration: .3s;
 }
 
 .filename {
@@ -320,7 +322,9 @@ body {
     background: var(--border);
     cursor: col-resize;
     flex-shrink: 0;
-    transition: background .15s;
+    /* transition: background .15s; */
+    transition-property: background;
+    transition-duration: .15s;
 }
 
 #resizer:hover,
@@ -402,7 +406,9 @@ body {
     height: 7px;
     border-radius: 50%;
     background: var(--green);
-    transition: background .2s;
+    /* transition: background .2s; */
+    transition-property: background;
+    transition-duration: .3s;
 }
 
 #preview-frame {
