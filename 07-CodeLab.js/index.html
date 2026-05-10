@@ -1,0 +1,106 @@
+<!--  -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeLab.js — Advanced Browser IDE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;1,400&family=Syne:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="header">
+        <div class="logo">
+            <div class="logo-mark">⚡</div>
+            Code<em>Lab</em>.js
+            <span class="badge-advanced">vanilla+</span>
+        </div>
+        <div class="divider"></div>
+        <div class="tab-group" role="tablist">
+            <button class="tab-btn active" data-lang="html" role="tab">HTML</button>
+            <button class="tab-btn" data-lang="css" role="tab">CSS</button>
+            <button class="tab-btn" data-lang="js" role="tab">JS</button>
+        </div>
+        <div class="hdr-right">
+            <span class="kbd-hint" title="Ctrl+Enter / Cmd+Enter">⌘/Ctrl + ↵</span>
+            <label class="autorun-label" title="Auto-run on every keystroke (debounced)">
+                <input type="checkbox" id="autorun-cb" checked>
+                <div class="toggle-track"><div class="toggle-thumb"></div></div>
+                Auto
+            </label>
+            <button id="run-btn" title="Run (Ctrl+Enter)">
+                <svg width="9" height="11" viewBox="0 0 9 11" fill="currentColor"><path d="M0 0l9 5.5L0 11V0z"/></svg>
+                Run
+            </button>
+        </div>
+    </div>
+
+    <div id="workspace">
+        <div id="editor-panel">
+            <div class="panel-bar">
+                <div class="lang-dot" id="lang-dot"></div>
+                <span class="filename" id="filename">index.html</span>
+                <span class="cursor-info" id="cursor-info">Ln 1, Col 1</span>
+                <span class="char-counter" id="char-counter">0 chars</span>
+            </div>
+            <div class="editor-body">
+                <textarea id="cm-textarea" rows="10" cols="30"></textarea>
+                 <!-- <textarea id="cm-textarea" spellcheck="false"></textarea> -->
+            </div>
+        </div>
+        <div id="resizer" title="Drag to resize"></div>
+        <div id="preview-panel">
+            <div class="panel-bar">
+                <div class="traffic-lights">
+                    <div class="tl tl-r"></div>
+                    <div class="tl tl-y"></div>
+                    <div class="tl tl-g"></div>
+                </div>
+                <div class="preview-url">sandbox://preview</div>
+                <div class="status-pill">
+                    <div class="status-dot" id="status-dot"></div>
+                    <span id="status-text">Ready</span>
+                </div>
+            </div>
+            <iframe id="preview-frame" sandbox="allow-scripts" title="Live preview"></iframe>
+        </div>
+    </div>
+
+    <div id="console-panel">
+        <div class="console-bar">
+            <span class="console-title">Console</span>
+            <span id="log-badge">0</span>
+            <div class="console-actions">
+                <button class="ghost-btn" id="save-storage-btn" title="Save current code to localStorage">💾 Save</button>
+                <button class="ghost-btn" id="reset-default-btn" title="Reset to default code">⟳ Reset</button>
+                <button class="ghost-btn" id="export-html-btn" title="Download as standalone HTML file">📄 Export</button>
+                <button class="ghost-btn" id="format-btn" title="Basic indent (placeholder)">Format</button>
+                <button class="ghost-btn" id="clear-console-btn">Clear</button>
+            </div>
+        </div>
+        <div id="console-out"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+    <script src="./script.js"></script>
+</body>
+
+</html>
