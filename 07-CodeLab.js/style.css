@@ -224,3 +224,133 @@ body {
 #run-btn:active {
     transform: translateY(0);
 }
+
+/* ===  workspace ==== */
+#workspace {
+    display: flex;
+    height: calc(100vh - var(--header-h) - var(--console-h));
+    overflow: hidden;
+}
+
+#editor-panel {
+    width: 50%;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.panel-bar {
+    height: var(--bar-h);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 13px;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.lang-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    transition: background .2s;
+}
+
+.filename {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.73rem;
+    color: var(--muted);
+}
+
+.cursor-info,
+.char-counter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+}
+
+.char-counter {
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+.editor-body {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    background: #0b0b14;
+}
+
+.CodeMirror {
+    position: absolute !important;
+    inset: 0 !important;
+    height: 100% !important;
+    font-family: 'JetBrains Mono', monospace !important;
+    font-size: 13px !important;
+    line-height: 1.75 !important;
+    background: #0b0b14 !important;
+}
+
+.cm-s-dracula.CodeMirror {
+    background: #0b0b14 !important;
+}
+
+.CodeMirror-gutters {
+    background: #0b0b14 !important;
+    border-right: 1px solid #1c1c2e !important;
+}
+
+.CodeMirror-linenumber {
+    color: #2e2e4a !important;
+}
+
+.CodeMirror-cursor {
+    border-left-color: var(--accent) !important;
+}
+
+.CodeMirror-selected {
+    background: rgba(124, 106, 247, 0.15) !important;
+}
+
+#resizer {
+    width: 5px;
+    background: var(--border);
+    cursor: col-resize;
+    flex-shrink: 0;
+    transition: background .15s;
+}
+
+#resizer:hover,
+#resizer.active {
+    background: var(--accent);
+}
+
+#resizer::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 2px;
+    height: 32px;
+    background: currentColor;
+    border-radius: 2px;
+    opacity: .5;
+}
+
+#preview-panel {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.traffic-lights {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
