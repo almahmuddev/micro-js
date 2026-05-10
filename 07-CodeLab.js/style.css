@@ -1,0 +1,226 @@
+
+/*  */
+
+:root {
+    --bg: #08080e;
+    --surface: #0f0f18;
+    --surface2: #14141f;
+    --border: #1c1c2e;
+    --border2: #27273a;
+    --accent: #7c6af7;
+    --accent-glow: rgba(124, 106, 247, 0.35);
+    --orange: #f0a05a;
+    --green: #52e8a0;
+    --red: #ff5a6e;
+    --text: #ddddf0;
+    --muted: #52527a;
+    --header-h: 52px;
+    --bar-h: 34px;
+    --console-h: 190px;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+}
+
+/* ==== header ==== */
+#header {
+    height: var(--header-h);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 16px;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    user-select: none;
+}
+
+.logo-mark {
+    width: 30px;
+    height: 30px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 15px;
+    box-shadow: 0 0 18px var(--accent-glow);
+}
+
+.logo em {
+    color: var(--accent);
+    font-style: normal;
+}
+
+.badge-advanced {
+    background: rgba(124, 106, 247, 0.2);
+    color: var(--accent);
+    font-size: 0.65rem;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 20px;
+    margin-left: 6px;
+    letter-spacing: normal;
+}
+
+.divider {
+    width: 1px;
+    height: 22px;
+    background: var(--border2);
+}
+
+.tab-group {
+    display: flex;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 2px;
+}
+
+.tab-btn {
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.14s;
+}
+
+.tab-btn:hover {
+    color: var(--text);
+}
+
+.tab-btn.active {
+    color: #fff;
+}
+
+.tab-btn[data-lang="html"].active {
+    background: var(--accent);
+    box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.tab-btn[data-lang="css"].active {
+    background: #1a8c5c;
+    box-shadow: 0 2px 12px rgba(82, 232, 160, .3);
+}
+
+.tab-btn[data-lang="js"].active {
+    background: #8a5c1a;
+    box-shadow: 0 2px 12px rgba(240, 160, 90, .3);
+}
+
+.hdr-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.kbd-hint {
+    font-size: 0.7rem;
+    color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+    padding: 3px 7px;
+    border: 1px solid var(--border2);
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.autorun-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    cursor: pointer;
+}
+
+.autorun-label:hover {
+    color: var(--text);
+}
+
+.autorun-label input {
+    display: none;
+}
+
+.toggle-track {
+    width: 34px;
+    height: 19px;
+    background: var(--border2);
+    border-radius: 10px;
+    position: relative;
+    transition: background .2s;
+}
+
+.toggle-thumb {
+    position: absolute;
+    top: 3.5px;
+    left: 3.5px;
+    width: 12px;
+    height: 12px;
+    background: var(--muted);
+    border-radius: 50%;
+    transition: all .2s;
+}
+
+.autorun-label input:checked+.toggle-track {
+    background: var(--accent);
+}
+
+.autorun-label input:checked+.toggle-track .toggle-thumb {
+    left: 18.5px;
+    background: #fff;
+}
+
+#run-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 8px 20px;
+    background: var(--accent);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.83rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .15s;
+    box-shadow: 0 2px 16px var(--accent-glow);
+}
+
+#run-btn:hover {
+    background: #9585ff;
+    transform: translateY(-1px);
+}
+
+#run-btn:active {
+    transform: translateY(0);
+}
