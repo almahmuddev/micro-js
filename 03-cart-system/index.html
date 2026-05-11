@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cart System — JS Build</title>
+  <title>Cart System — Modular & Feature-Ready</title>
 
   <!-- Google Fonts -->
   <link
@@ -13,38 +13,97 @@
 
   <!-- Custom CSS -->
   <link rel="stylesheet" href="./style/cart.css" />
-
 </head>
 
 <body>
 
   <div class="layout">
-    <!-- Products -->
+    <!-- left side-  -->
     <div>
-      <h2>Shop</h2>
+      <div class="shop-header">
+        <h2>Shop</h2>
+        <!-- Theme Toggle  -->
+        <button id="theme-toggle" class="theme-toggle" aria-label="Switch theme">🌓</button>
+      </div>
+
+      <!-- filter bar -->
+      <div class="filters-bar">
+        <input type="text" id="search-input" placeholder="🔍 Search products..." class="search-input" />
+        <select id="price-filter" class="price-filter">
+          <option value="all">All prices</option>
+          <option value="under30">Under $30</option>
+          <option value="30-60">$30 – $60</option>
+          <option value="over60">Over $60</option>
+        </select>
+      </div>
+
+      <!-- products grid - dynamic content -->
       <div class="products-grid" id="products-grid"></div>
     </div>
 
-    <!-- Cart -->
+    <!-- right panel -->
     <div class="cart-panel">
       <h2>
         Cart
         <span class="cart-count-badge" id="cart-badge">0</span>
       </h2>
+
+      <!-- shiping progress -->
+      <div class="shipping-progress" id="shipping-progress-bar">
+        <div class="shipping-fill" id="shipping-fill"></div>
+      </div>
+      <div class="shipping-message" id="shipping-message">Add items to unlock free shipping</div>
+
+      <!-- cart items list -->
       <p class="cart-empty" id="cart-empty">Your cart is empty.</p>
       <ul class="cart-items" id="cart-items"></ul>
+
+      <!-- cart summery + coupon -->
       <div class="cart-summary" id="cart-summary">
-        <div class="summary-row"><span>Subtotal</span><span id="subtotal">$0.00</span></div>
-        <div class="summary-row"><span>Shipping</span><span id="shipping">$0.00</span></div>
-        <div class="summary-total"><span>Total</span><span id="total">$0.00</span></div>
+        <div class="coupon-section">
+          <input type="text" id="coupon-input" placeholder="Coupon code" class="coupon-input" />
+          <button id="apply-coupon-btn" class="coupon-apply">Apply</button>
+          <div id="coupon-feedback" class="coupon-feedback"></div>
+        </div>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Discount</span>
+          <span id="discount">$0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span id="shipping">$0.00</span>
+        </div>
+        <div class="summary-total">
+          <span>Total</span>
+          <span id="total">$0.00</span>
+        </div>
         <button class="checkout-btn" id="checkout-btn">Checkout</button>
+      </div>
+
+      <!-- saved for later -->
+      <div class="saved-section" id="saved-section">
+        <div class="saved-title">📦 Saved for later</div>
+        <ul class="saved-items" id="saved-items-list"></ul>
       </div>
     </div>
   </div>
 
-  <!-- Custom JS -->
-   <script src="./js/cart.js"></script>
-   <script src="./js/data.js"></script>
+  <!-- toast notification (for undo / general messages) -->
+  <div id="toast" class="toast"></div>
+
+  <!-- addition of Custom js  -->
+
+  <script src="./js/application.js"></script>
+  <script src="./js/cart.js"></script>
+  <script src="./js/data.js"></script>
+  <script src="./js/filter.js"></script>
+  <script src="./js/storage.js"></script>
+  <script src="./js/ui.js"></script>
 </body>
 
 </html>

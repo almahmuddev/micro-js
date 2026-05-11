@@ -300,3 +300,7 @@
         color: var(--muted);
         cursor: default;
     }
+
+    .saved-section {
+        display: none;
+    }
