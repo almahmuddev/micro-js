@@ -254,7 +254,7 @@
 
     .cart-summary {
         margin-top: 1rem;
-        display:none
+        display: none
     }
 
     .summary-row {
@@ -303,4 +303,117 @@
 
     .saved-section {
         display: none;
+    }
+
+
+
+    /*   adding new css */
+
+
+    
+    /* Shop header */
+    .shop-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .theme-toggle {
+        background: none;
+        border: 1px solid var(--border);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        cursor: pointer;
+        font-size: 1.2rem;
+    }
+
+    /* Filters bar */
+    .filters-bar {
+        display: flex;
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .search-input,
+    .price-filter {
+        padding: 0.5rem 0.8rem;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+        font-family: 'Jost', sans-serif;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 150px;
+    }
+
+    /* Coupon section */
+    .coupon-section {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .coupon-input {
+        flex: 1;
+        padding: 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-family: 'Jost', sans-serif;
+    }
+
+    .coupon-apply {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .coupon-feedback {
+        font-size: 0.7rem;
+        width: 100%;
+    }
+
+    /* Product stock */
+    .product-stock {
+        margin-bottom: 0.5rem;
+    }
+
+    .add-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    /* quantity animation */
+    .qty-display.pop {
+        transform: scale(1.2);
+        display: inline-block;
+    }
+
+    /* toast design */
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #2d5a3dcc;
+        /* backdrop-filter: blur(4px); */
+        color: white;
+        padding: 0.7rem 1.2rem;
+        border-radius: 40px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        z-index: 1000;
+        opacity: 0;
+        transition: opacity 0.2s ease;
+        pointer-events: auto;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
