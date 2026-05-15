@@ -8,9 +8,9 @@ let myCart = [];
 let savedItems = [];
 let pendingRemoval = null;
 let undoTimeout = null;
-let listeners = []; // for UI updates
+let listeners = []; 
 
-// Subscribe to changes
+// subscribe to changes
 export function subscribeToCartChanges(callback) {
   listeners.push(callback);
 }
@@ -19,7 +19,7 @@ function notifyListeners() {
   listeners.forEach(cb => cb());
 }
 
-// Helper functions
+// helper functions
 export function findCartItem(itemId) {
   return myCart.find(item => item.id === itemId) || null;
 }
@@ -28,7 +28,7 @@ export function findSavedItem(itemId) {
   return savedItems.find(item => item.id === itemId);
 }
 
-// Core cart operations
+// core cart operations
 export function addItemToCart(itemId, quantity = 1) {
   const product = inventory.find(p => p.id === itemId);
   if (!product) return false;
@@ -37,7 +37,7 @@ export function addItemToCart(itemId, quantity = 1) {
   const currentQty = existing ? existing.qty : 0;
   const newQty = currentQty + quantity;
   
-  // Stock check
+  //  check stock
   if (newQty > product.stock) {
     showToastMessage(`❌ Only ${product.stock} left in stock`, 2000);
     return false;
@@ -93,7 +93,7 @@ export function removeItemWithUndo(itemId) {
   saveToLocalStorage(myCart, savedItems);
   notifyListeners();
   
-  // Show undo toast
+  //  undo toast
   showUndoToast(`${item.name} removed`, itemId);
   
   // Set auto-clear
