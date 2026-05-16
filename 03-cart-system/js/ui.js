@@ -2,7 +2,7 @@
 
 import { inventory, freeShippingLimit, standardShippingFee } from './data.js';
 import { getCart, getSavedItems, findCartItem } from './cart.js';
-import { filterProducts, setSearchTerm, setPriceRange } from './filters.js';
+import { filterProducts, setSearchTerm, setPriceRange, getCurrentFilters } from './filter.js';
 import { calculateDiscount, getActiveCoupon, shouldFreeShipping } from './coupon.js';
 
 // DOM elements
@@ -28,13 +28,24 @@ export function initUI() {
   shippingFill = document.getElementById('shipping-fill');
   shippingMessage = document.getElementById('shipping-message');
   toastEl = document.getElementById('toast');
+
+  // Theme toggle
+  const themeToggle = document.getElementById('theme-toggle');
+  const savedTheme = localStorage.getItem('cart_theme') || 'light';
+  document.documentElement.setAttribute('data-theme', savedTheme);
+  themeToggle.addEventListener('click', () => {
+    const current = document.documentElement.getAttribute('data-theme');
+    const next = current === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('cart_theme', next);
+  });
 }
 
 export function showToast(message, duration = 2000, isUndo = false, undoItemId = null) {
   if (toastTimeout) clearTimeout(toastTimeout);
-  
+
   toastEl.textContent = message;
-  
+
   if (isUndo && undoItemId) {
     const undoBtn = document.createElement('button');
     undoBtn.textContent = ' Undo';
@@ -57,7 +68,7 @@ export function showToast(message, duration = 2000, isUndo = false, undoItemId =
   } else {
     toastEl.innerHTML = message;
   }
-  
+
   toastEl.style.opacity = '1';
   toastTimeout = setTimeout(() => {
     toastEl.style.opacity = '0';
@@ -67,13 +78,13 @@ export function showToast(message, duration = 2000, isUndo = false, undoItemId =
 export function renderProducts() {
   const filtered = filterProducts();
   productsGrid.innerHTML = '';
-  
+
   filtered.forEach(product => {
     const inCart = !!findCartItem(product.id);
     const cartItem = findCartItem(product.id);
     const currentQty = cartItem ? cartItem.qty : 0;
     const stockLeft = product.stock - currentQty;
-    
+
     const card = document.createElement('div');
     card.className = 'product-card';
     card.innerHTML = `
@@ -92,7 +103,7 @@ export function renderProducts() {
         </div>
       </div>
     `;
-    
+
     const addBtn = card.querySelector('.add-btn');
     if (addBtn && stockLeft > 0) {
       addBtn.addEventListener('click', () => {
@@ -101,7 +112,7 @@ export function renderProducts() {
         });
       });
     }
-    
+
     productsGrid.appendChild(card);
   });
 }
@@ -124,10 +135,10 @@ export function renderCart() {
   const shipping = (!shippingFree && cart.length > 0) ? standardShippingFee : 0;
   const total = discountedSubtotal + shipping;
   const itemCount = cart.reduce((sum, item) => sum + item.qty, 0);
-  
+
   // update badge
   cartBadge.textContent = itemCount;
-  
+
   // update shipping ui
   if (cart.length === 0) {
     shippingFill.style.width = '0%';
@@ -141,7 +152,7 @@ export function renderCart() {
     shippingFill.style.width = `${Math.min(percent, 100)}%`;
     shippingMessage.textContent = `Add $${remaining.toFixed(2)} more for free shipping`;
   }
-  
+
   // show/hide empty state
   if (cart.length === 0) {
     cartEmpty.style.display = 'block';
@@ -151,7 +162,7 @@ export function renderCart() {
     cartEmpty.style.display = 'none';
     cartSummary.style.display = 'block';
     cartItems.innerHTML = '';
-    
+
     cart.forEach(item => {
       const row = document.createElement('li');
       row.className = 'cart-item';
@@ -169,14 +180,14 @@ export function renderCart() {
       `;
       cartItems.appendChild(row);
     });
-    
+
     // event delegation for cart actions
     cartItems.onclick = (e) => {
       const btn = e.target.closest('[data-action]');
       if (!btn) return;
       const id = parseInt(btn.dataset.id);
       const action = btn.dataset.action;
-      
+
       import('./cart.js').then(module => {
         if (action === 'increase') module.adjustQuantity(id, 1);
         if (action === 'decrease') module.adjustQuantity(id, -1);
@@ -185,13 +196,13 @@ export function renderCart() {
       });
     };
   }
-  
+
   // update summary
   subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
   discountEl.textContent = `-$${discountAmount.toFixed(2)}`;
   shippingEl.textContent = shipping === 0 ? 'Free' : `$${shipping.toFixed(2)}`;
   totalEl.textContent = `$${total.toFixed(2)}`;
-  
+
   // render saved items
   if (saved.length === 0) {
     savedSection.style.display = 'none';
@@ -211,7 +222,7 @@ export function renderCart() {
       `;
       savedList.appendChild(li);
     });
-    
+
     document.querySelectorAll('.move-to-cart-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = parseInt(btn.dataset.savedId);
@@ -226,12 +237,12 @@ export function renderCart() {
 export function setupFilters() {
   const searchInput = document.getElementById('search-input');
   const priceFilter = document.getElementById('price-filter');
-  
+
   searchInput.addEventListener('input', (e) => {
     setSearchTerm(e.target.value);
     renderProducts();
   });
-  
+
   priceFilter.addEventListener('change', (e) => {
     setPriceRange(e.target.value);
     renderProducts();
@@ -242,18 +253,18 @@ export function setupCoupon() {
   const couponInput = document.getElementById('coupon-input');
   const applyBtn = document.getElementById('apply-coupon-btn');
   const feedback = document.getElementById('coupon-feedback');
-  
+
   applyBtn.addEventListener('click', async () => {
     const code = couponInput.value.trim();
     const cart = getCart();
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    
+
     const { applyCoupon } = await import('./coupon.js');
     const result = applyCoupon(code, subtotal);
-    
+
     feedback.textContent = result.message;
     feedback.style.color = result.success ? '#2d5a3d' : '#a33028';
-    
+
     if (result.success) {
       couponInput.value = '';
       renderCart();
@@ -271,12 +282,12 @@ export function setupCheckout() {
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     const { getActiveCoupon } = await import('./coupon.js');
     const { clearCart } = await import('./cart.js');
-    
+
     const discount = calculateDiscount(subtotal);
     const shippingFree = shouldFreeShipping() || subtotal - discount >= freeShippingLimit;
     const shipping = (!shippingFree && cart.length > 0) ? standardShippingFee : 0;
     const total = subtotal - discount + shipping;
-    
+
     alert(`Order placed! Total: $${total.toFixed(2)}\n✨ Thank you for shopping with us.`);
     clearCart();
     const { removeCoupon } = await import('./coupon.js');
